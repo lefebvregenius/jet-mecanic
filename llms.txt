@@ -10,7 +10,7 @@ interactive experiences, modern interfaces and bespoke digital
 solutions.
 
 Official website:
-https://gralwebs-site.vercel.app/
+https://jet-mecanic.vercel.app/
 
 ## Project
 
