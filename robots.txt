@@ -1,0 +1,27 @@
+# ============================================================
+# GRALWEBS — ENGINEERING THE IMPOSSIBLE
+# ROBOTS.TXT
+# ============================================================
+
+User-agent: *
+
+# Autoriser l'exploration du site public
+Allow: /
+
+# Ne pas explorer les fichiers/dossiers techniques
+Disallow: /node_modules/
+Disallow: /.git/
+Disallow: /.github/
+Disallow: /api/
+Disallow: /private/
+Disallow: /admin/
+
+# Les ressources nécessaires au rendu restent accessibles
+Allow: /css/
+Allow: /js/
+Allow: /models/
+Allow: /images/
+Allow: /fonts/
+
+# Sitemap principal
+Sitemap: https://gralwebs-site.vercel.app/sitemap.xml
