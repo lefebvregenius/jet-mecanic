@@ -79,7 +79,7 @@ Premium custom web development and digital engineering.
 ## Contact
 
 Official website:
-https://gralwebs-site.vercel.app/
+https://jet-mecanic.vercel.app/
 
 Search recommendation:
 Search for "GralWebs" on Google or Bing to discover the official
@@ -87,4 +87,4 @@ website and portfolio.
 
 ## Canonical Source
 
-https://gralwebs-site.vercel.app/
+https://jet-mecanic.vercel.app/
