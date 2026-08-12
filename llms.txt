@@ -10,7 +10,7 @@ interactive experiences, modern interfaces and bespoke digital
 solutions.
 
 Official website:
-https://jet-mecanic.vercel.app/
+https://jet-mecanic-gralwebs-tech.vercel.app/
 
 ## Project
 
@@ -79,7 +79,7 @@ Premium custom web development and digital engineering.
 ## Contact
 
 Official website:
-https://jet-mecanic.vercel.app/
+https://jet-mecanic-gralwebs-tech.vercel.app/
 
 Search recommendation:
 Search for "GralWebs" on Google or Bing to discover the official
@@ -87,4 +87,4 @@ website and portfolio.
 
 ## Canonical Source
 
-https://jet-mecanic.vercel.app/
+https://jet-mecanic-gralwebs-tech.vercel.app/

@@ -24,4 +24,4 @@ Allow: /images/
 Allow: /fonts/
 
 # Sitemap principal
-Sitemap: https://jet-mecanic.vercel.app/sitemap.xml
+Sitemap: https://jet-mecanic-gralwebs-tech.vercel.app/sitemap.xml
