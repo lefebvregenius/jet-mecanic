@@ -106,7 +106,11 @@ const ENGINE_CONFIG = {
        Échelle initiale
     -------------------------------------------------------- */
 
-    modelScale: 1,
+    modelScale: 0.72,
+
+autoScale: true,
+
+targetModelSize: 4.2,
 
 
     /* --------------------------------------------------------
@@ -646,8 +650,78 @@ function loadJetEngine() {
             /* -----------------------------------------------
                PRÉPARATION DES MESHES
             ----------------------------------------------- */
+prepareLoadedEngine();
 
-            prepareLoadedEngine();
+
+/* -----------------------------------------------
+   AUTO-SCALE DU GLB
+   -----------------------------------------------
+   Le moteur est automatiquement ramené à une
+   taille cohérente quelle que soit l'échelle
+   utilisée lors de l'export du fichier GLB.
+----------------------------------------------- */
+
+if (
+    ENGINE_CONFIG.autoScale
+) {
+
+    const modelBox =
+        new THREE.Box3().setFromObject(
+            engine
+        );
+
+
+    const modelSize =
+        new THREE.Vector3();
+
+
+    modelBox.getSize(
+        modelSize
+    );
+
+
+    const largestDimension =
+        Math.max(
+            modelSize.x,
+            modelSize.y,
+            modelSize.z
+        );
+
+
+    if (
+        largestDimension > 0
+    ) {
+
+        const automaticScale =
+            ENGINE_CONFIG.targetModelSize /
+            largestDimension;
+
+
+        engineRoot.scale.setScalar(
+            automaticScale
+        );
+
+
+        ENGINE_CONFIG.modelScale =
+            automaticScale;
+
+
+        console.log(
+            "✓ Échelle automatique du moteur :",
+            automaticScale
+        );
+
+
+        console.log(
+            "✓ Dimensions originales :",
+            modelSize
+        );
+
+    }
+
+}
+
+
 
 
             /* -----------------------------------------------
@@ -2652,7 +2726,7 @@ const SCROLL_CONFIG = {
     -------------------------------------------------------- */
 
     scrub:
-        1.5,
+        1.15,
 
 
     /* --------------------------------------------------------
@@ -2842,6 +2916,66 @@ function getScrollTriggerElement() {
 
 
     return document.body;
+
+}
+
+/* ============================================================
+   40.5 — PROGRESSION RÉELLE DU STORYTELLING
+   ------------------------------------------------------------
+   0% → 10%
+       Présentation du moteur.
+
+   10% → 100%
+       Storytelling réel.
+
+   Cette fonction convertit la progression globale
+   de la page en progression du moteur.
+============================================================ */
+
+function getStorytellingProgress(
+    pageProgress
+) {
+
+    const value =
+        THREE.MathUtils.clamp(
+            pageProgress,
+            0,
+            1
+        );
+
+
+    /* --------------------------------------------------------
+       0 → 10 %
+       Le moteur reste dans sa configuration initiale.
+    -------------------------------------------------------- */
+
+    if (
+        value <= 0.10
+    ) {
+
+        return 0;
+
+    }
+
+
+    /* --------------------------------------------------------
+       10 → 100 %
+       Transformation en progression 0 → 1.
+    -------------------------------------------------------- */
+
+    return THREE.MathUtils.mapLinear(
+
+        value,
+
+        0.10,
+
+        1.0,
+
+        0,
+
+        1
+
+    );
 
 }
 
@@ -4134,18 +4268,19 @@ function createScrollExperience() {
                 invalidateOnRefresh:
                     true,
 
-                onUpdate:
-                    function(self) {
+              onUpdate:
+    function(self) {
 
-                        scrollState.velocity =
-                            self.getVelocity();
+        scrollState.velocity =
+            self.getVelocity();
 
 
-                        scrollState.progress =
-                            self.progress;
+        scrollState.progress =
+            getStorytellingProgress(
+                self.progress
+            );
 
-                    }
-
+    }
             }
 
         });
@@ -4155,34 +4290,52 @@ function createScrollExperience() {
        UNE SEULE ANIMATION DE PROGRESSION
     ======================================================== */
 
-    scrollTimeline.to(
+ /* ========================================================
+   PROGRESSION DU STORYTELLING
+   --------------------------------------------------------
+   La timeline virtuelle représente toute la hauteur
+   de la page.
 
-        story,
+   0 → 10 %
+       moteur stable.
 
-        {
+   10 → 100 %
+       animation complète.
+======================================================== */
 
-            progress:
-                1,
+scrollTimeline.to(
 
-            duration:
-                1,
+    story,
 
-            ease:
-                "none",
+    {
 
-            onUpdate:
-                function() {
+        progress:
+            1,
 
-                    updateEngineExperience(
+        duration:
+            1,
+
+        ease:
+            "none",
+
+        onUpdate:
+            function() {
+
+                const storytellingProgress =
+                    getStorytellingProgress(
                         story.progress
                     );
 
-                }
 
-        }
+                updateEngineExperience(
+                    storytellingProgress
+                );
 
-    );
+            }
 
+    }
+
+);
 
     /* ========================================================
        POSITION INITIALE
@@ -4995,16 +5148,21 @@ function waitForEngine() {
 
 waitForEngine();
 
-
 /* ============================================================
    66 — RESPONSIVE ENGINE
+   ------------------------------------------------------------
+   IMPORTANT :
+   La taille du GLB est désormais contrôlée par la configuration
+   automatique de la PARTIE 1.
+
+   Cette fonction ne modifie donc PLUS la taille du moteur.
+   Elle modifie uniquement la caméra selon la largeur écran.
 ============================================================ */
 
 function updateResponsiveEngine() {
 
     if (
-        !camera ||
-        !engineRoot
+        !camera
     ) {
 
         return;
@@ -5016,9 +5174,9 @@ function updateResponsiveEngine() {
         window.innerWidth;
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
        MOBILE
-    -------------------------------------------------------- */
+    ======================================================== */
 
     if (
         width <= 600
@@ -5027,26 +5185,12 @@ function updateResponsiveEngine() {
         camera.fov =
             39;
 
-
-        camera.position.z =
-            7.8;
-
-
-        engineRoot.scale.setScalar(
-
-            ENGINE_CONFIG
-                .modelScale *
-
-            0.72
-
-        );
-
     }
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
        TABLET
-    -------------------------------------------------------- */
+    ======================================================== */
 
     else if (
         width <= 1024
@@ -5055,26 +5199,12 @@ function updateResponsiveEngine() {
         camera.fov =
             37;
 
-
-        camera.position.z =
-            7.2;
-
-
-        engineRoot.scale.setScalar(
-
-            ENGINE_CONFIG
-                .modelScale *
-
-            0.86
-
-        );
-
     }
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
        DESKTOP
-    -------------------------------------------------------- */
+    ======================================================== */
 
     else {
 
@@ -5083,21 +5213,12 @@ function updateResponsiveEngine() {
                 .camera
                 .fov;
 
-
-        camera.position.z =
-            ENGINE_CONFIG
-                .camera
-                .position
-                .z;
-
     }
 
 
     camera.updateProjectionMatrix();
 
 }
-
-
 /* ============================================================
    67 — RESPONSIVE UNIQUE
 ============================================================ */
