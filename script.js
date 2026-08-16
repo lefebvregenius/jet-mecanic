@@ -110,7 +110,7 @@ const ENGINE_CONFIG = {
 
 autoScale: true,
 
-targetModelSize: 4.2,
+targetModelSize: 2.52,
 
 
     /* --------------------------------------------------------
@@ -163,7 +163,7 @@ targetModelSize: 4.2,
     renderer: {
 
         pixelRatioMaximum:
-            2,
+    1.75,
 
         powerPreference:
             "high-performance"
@@ -2703,12 +2703,8 @@ const SCROLL_CONFIG = {
     -------------------------------------------------------- */
 
     triggerSelectors: [
-        "#engine",
-        ".engine-section",
-        "#aircraft-scene",
-        "body"
-    ],
-
+    "body"
+],
 
     /* --------------------------------------------------------
        Durée virtuelle du storytelling
@@ -2740,7 +2736,7 @@ const SCROLL_CONFIG = {
 
         end:
             ENGINE_CONFIG.modelRotation.y +
-            Math.PI * 2.0
+            Math.PI * 3.0
 
     },
 
@@ -2830,15 +2826,14 @@ const SCROLL_CONFIG = {
 
         },
 
-        final: {
+       final: {
 
-            x: 0,
+    x: 0,
 
-            y: 0,
-
-            z: 0
-
-        }
+    y: -5.2,
+    
+    z: 0
+}
 
     }
 
@@ -3490,6 +3485,31 @@ function updateEngineAnimation(
 
         );
 
+        /* --------------------------------------------------------
+   SWIRL PREMIUM
+-------------------------------------------------------- */
+
+engineRoot.rotation.z =
+    Math.sin(
+        value * Math.PI * 2.0
+    ) * 0.12;
+
+
+engineRoot.rotation.x =
+    ENGINE_CONFIG
+        .modelRotation
+        .x
+
+    +
+
+    (
+        Math.sin(
+            value * Math.PI * 2.0
+        )
+        *
+        0.08
+    );
+
 
     /* --------------------------------------------------------
        INCLINAISON CINÉMATIQUE
@@ -3512,25 +3532,78 @@ function updateEngineAnimation(
         );
 
 
-    /* --------------------------------------------------------
-       LÉGER MOUVEMENT VERTICAL
-    -------------------------------------------------------- */
+/* --------------------------------------------------------
+   TRAJECTOIRE VERTICALE PREMIUM
+   Le moteur descend progressivement pendant le scroll.
+-------------------------------------------------------- */
 
-    engineRoot.position.y =
+const verticalDrop =
+    THREE.MathUtils.lerp(
+        0,
+        -6.5,
+        value
+    );
 
-        ENGINE_CONFIG
-            .modelPosition
-            .y
 
-        +
+/* --------------------------------------------------------
+   MOUVEMENT LATÉRAL CINÉMATIQUE
+-------------------------------------------------------- */
 
-        (
-            Math.sin(
-                value * Math.PI
-            )
-            *
-            0.035
-        );
+const lateralMotion =
+    Math.sin(
+        value * Math.PI * 1.5
+    ) * 0.55;
+
+
+/* --------------------------------------------------------
+   MOUVEMENT PROFONDEUR
+-------------------------------------------------------- */
+
+const depthMotion =
+    Math.cos(
+        value * Math.PI * 1.25
+    ) * 0.45;
+
+
+/* --------------------------------------------------------
+   PETIT MOUVEMENT ORBITAL
+-------------------------------------------------------- */
+
+const orbitalX =
+    Math.sin(
+        value * Math.PI * 2.0
+    ) * 0.35;
+
+const orbitalY =
+    Math.cos(
+        value * Math.PI * 2.0
+    ) * 0.18;
+
+
+/* --------------------------------------------------------
+   POSITION FINALE
+-------------------------------------------------------- */
+
+engineRoot.position.x =
+    ENGINE_CONFIG.modelPosition.x
+    +
+    lateralMotion
+    +
+    orbitalX;
+
+
+engineRoot.position.y =
+    ENGINE_CONFIG.modelPosition.y
+    +
+    verticalDrop
+    +
+    orbitalY;
+
+
+engineRoot.position.z =
+    ENGINE_CONFIG.modelPosition.z
+    +
+    depthMotion;
 
 }
 
