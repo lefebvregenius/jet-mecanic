@@ -49,6 +49,42 @@ import {
     "https://cdn.jsdelivr.net/npm/gsap@3.12.5/ScrollTrigger.js";
 
 
+    /* ============================================================
+   PRELOAD PRIORITAIRE DU GLB
+   Lance le téléchargement du moteur le plus tôt possible.
+============================================================ */
+
+(() => {
+
+    const preload =
+        document.createElement("link");
+
+    preload.rel = "preload";
+
+    preload.as = "fetch";
+
+    preload.href =
+        "./models/jet_engine.glb";
+
+    preload.type =
+        "model/gltf-binary";
+
+    preload.crossOrigin =
+        "anonymous";
+
+    if ("fetchPriority" in preload) {
+
+        preload.fetchPriority =
+            "high";
+
+    }
+
+    document.head.appendChild(
+        preload
+    );
+
+})();
+
 /* ============================================================
    02 — ENREGISTREMENT GSAP
 ============================================================ */
@@ -303,22 +339,28 @@ function initializeThreeScene() {
     /* ========================================================
        RENDERER
     ======================================================== */
+renderer =
+    new THREE.WebGLRenderer({
 
-    renderer =
-        new THREE.WebGLRenderer({
+        canvas: canvas,
 
-            canvas: canvas,
+        antialias:
+            window.innerWidth <= 768
+                ? false
+                : true,
 
-            antialias: true,
+        alpha: true,
 
-            alpha: true,
+        powerPreference:
+            "high-performance",
 
-            powerPreference:
-                ENGINE_CONFIG
-                    .renderer
-                    .powerPreference
+        depth: true,
 
-        });
+        stencil: false,
+
+        preserveDrawingBuffer: false
+
+    });
 
 
     renderer.setPixelRatio(
@@ -367,17 +409,12 @@ function initializeThreeScene() {
         1.15;
 
 
-    /* --------------------------------------------------------
-       OMBRES
-    -------------------------------------------------------- */
+   /* ============================================================
+   OPTIMISATION GPU
+============================================================ */
 
-    renderer.shadowMap.enabled =
-        true;
-
-
-    renderer.shadowMap.type =
-        THREE.PCFSoftShadowMap;
-
+renderer.shadowMap.enabled =
+    false;
 
     /* ========================================================
        LUMIÈRE AMBIANTE
@@ -647,38 +684,66 @@ function loadJetEngine() {
             );
 
 
-            /* -----------------------------------------------
-               PRÉPARATION DES MESHES
-            ----------------------------------------------- */
-prepareLoadedEngine();
+          /* ============================================================
+   AFFICHAGE IMMÉDIAT DU MOTEUR
+   Le modèle est rendu visible avant les calculs lourds.
+============================================================ */
 
+engine.visible = true;
+engineRoot.visible = true;
 
-/* -----------------------------------------------
-   AUTO-SCALE DU GLB
-   -----------------------------------------------
-   Le moteur est automatiquement ramené à une
-   taille cohérente quelle que soit l'échelle
-   utilisée lors de l'export du fichier GLB.
------------------------------------------------ */
+/* Force la mise à jour des matrices */
+
+engineRoot.updateMatrixWorld(
+    true
+);
+
+engine.updateMatrixWorld(
+    true
+);
+
+/* Premier rendu immédiat */
+
+if (
+    renderer &&
+    scene &&
+    camera
+) {
+
+    renderer.render(
+        scene,
+        camera
+    );
+
+}
+
+/* ============================================================
+   AUTO-SCALE ROBUSTE + CADRAGE AUTOMATIQUE
+============================================================ */
 
 if (
     ENGINE_CONFIG.autoScale
 ) {
 
     const modelBox =
-        new THREE.Box3().setFromObject(
-            engine
-        );
-
+        new THREE.Box3()
+            .setFromObject(
+                engine
+            );
 
     const modelSize =
         new THREE.Vector3();
 
+    const modelCenter =
+        new THREE.Vector3();
 
     modelBox.getSize(
         modelSize
     );
 
+    modelBox.getCenter(
+        modelCenter
+    );
 
     const largestDimension =
         Math.max(
@@ -686,7 +751,6 @@ if (
             modelSize.y,
             modelSize.z
         );
-
 
     if (
         largestDimension > 0
@@ -696,28 +760,77 @@ if (
             ENGINE_CONFIG.targetModelSize /
             largestDimension;
 
-
         engineRoot.scale.setScalar(
             automaticScale
         );
 
-
         ENGINE_CONFIG.modelScale =
             automaticScale;
 
-
-        console.log(
-            "✓ Échelle automatique du moteur :",
-            automaticScale
-        );
-
-
-        console.log(
-            "✓ Dimensions originales :",
-            modelSize
-        );
-
     }
+
+    /* --------------------------------------------------------
+       RECENTRAGE DU MODÈLE
+    -------------------------------------------------------- */
+
+    engine.position.sub(
+        modelCenter
+    );
+
+    /* --------------------------------------------------------
+       MISE À JOUR IMMÉDIATE
+    -------------------------------------------------------- */
+
+    engineRoot.updateMatrixWorld(
+        true
+    );
+
+    /* --------------------------------------------------------
+       CALCUL DU CADRAGE
+    -------------------------------------------------------- */
+
+    const finalBox =
+        new THREE.Box3()
+            .setFromObject(
+                engine
+            );
+
+    const finalSphere =
+        finalBox.getBoundingSphere(
+            new THREE.Sphere()
+        );
+
+    const radius =
+        finalSphere.radius;
+
+    const fovRadians =
+        THREE.MathUtils.degToRad(
+            camera.fov
+        );
+
+    const requiredDistance =
+        radius /
+        Math.sin(
+            fovRadians / 2
+        );
+
+    /* --------------------------------------------------------
+       GARANTIT QUE LE MODÈLE RESTE DANS LE CHAMP
+    -------------------------------------------------------- */
+
+    camera.position.z =
+        Math.max(
+            ENGINE_CONFIG.camera.position.z,
+            requiredDistance * 1.15
+        );
+
+    camera.lookAt(
+        0,
+        0,
+        0
+    );
+
+    camera.updateProjectionMatrix();
 
 }
 
@@ -792,16 +905,61 @@ if (
                 true;
 
 
-            /* -----------------------------------------------
-               DONNÉES DES COMPOSANTS
-               ----------------------------------------------- */
+        /* ============================================================
+   DONNÉES DES COMPOSANTS
+   ------------------------------------------------------------
+   UNE SEULE INITIALISATION
+   ------------------------------------------------------------
+   Le moteur est d'abord rendu visible.
+   Ensuite seulement les données des composants sont préparées.
+============================================================ */
 
-            prepareEngineParts();
+/* ------------------------------------------------------------
+   1 — RENDRE LE MOTEUR VISIBLE IMMÉDIATEMENT
+------------------------------------------------------------ */
 
+engine.visible = true;
 
-            console.log(
-                "✓ Moteur prêt."
-            );
+if (engineRoot) {
+
+    engineRoot.visible = true;
+
+    engineRoot.updateMatrixWorld(
+        true
+    );
+
+}
+
+/* ------------------------------------------------------------
+   2 — PREMIER RENDU IMMÉDIAT
+   ------------------------------------------------------------ */
+
+if (
+    renderer &&
+    scene &&
+    camera
+) {
+
+    renderer.render(
+        scene,
+        camera
+    );
+
+}
+
+/* ------------------------------------------------------------
+   3 — DONNÉES DES COMPOSANTS
+   ------------------------------------------------------------ */
+
+prepareEngineParts();
+
+/* ------------------------------------------------------------
+   4 — CONFIRMATION
+------------------------------------------------------------ */
+
+console.log(
+    "✓ Moteur prêt."
+);
 
 
             /* -----------------------------------------------
