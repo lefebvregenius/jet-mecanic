@@ -146,7 +146,7 @@ const ENGINE_CONFIG = {
 
 autoScale: true,
 
-targetModelSize: 2.52,
+targetModelSize: 1.26,
 
 
     /* --------------------------------------------------------
@@ -187,7 +187,7 @@ targetModelSize: 2.52,
             1.35,
 
         scrollRotation:
-            Math.PI * 1.5
+            Math.PI * 2.0
 
     },
 
@@ -2860,27 +2860,33 @@ const SCROLL_CONFIG = {
        Si aucun des deux n'existe, il utilise body.
     -------------------------------------------------------- */
 
-    triggerSelectors: [
+   triggerSelectors: [
+    "#engine",
+    ".engine-section",
+    "main",
     "body"
 ],
-
     /* --------------------------------------------------------
        Durée virtuelle du storytelling
     -------------------------------------------------------- */
 
     start:
-        "top top",
+    "top top",
 
-    end:
-        "bottom bottom",
+end:
+    () => `+=${Math.max(
+        document.documentElement.scrollHeight,
+        document.body.scrollHeight
+    ) - window.innerHeight}`,
 
+scrub:
+    1.15,
 
     /* --------------------------------------------------------
        Fluidité
     -------------------------------------------------------- */
 
-    scrub:
-        1.15,
+    
 
 
     /* --------------------------------------------------------
@@ -3603,7 +3609,6 @@ function updateCameraTarget(
 /* ============================================================
    43 — ANIMATION DU MOTEUR
 ============================================================ */
-
 function updateEngineAnimation(
     progress
 ) {
@@ -3614,7 +3619,6 @@ function updateEngineAnimation(
 
     }
 
-
     const value =
         THREE.MathUtils.clamp(
             progress,
@@ -3624,11 +3628,10 @@ function updateEngineAnimation(
 
 
     /* --------------------------------------------------------
-       ROTATION GÉNÉRALE
+       ROTATION PRINCIPALE
     -------------------------------------------------------- */
 
     engineRoot.rotation.y =
-
         THREE.MathUtils.lerp(
 
             SCROLL_CONFIG
@@ -3643,34 +3646,24 @@ function updateEngineAnimation(
 
         );
 
-        /* --------------------------------------------------------
-   SWIRL PREMIUM
--------------------------------------------------------- */
 
-engineRoot.rotation.z =
-    Math.sin(
-        value * Math.PI * 2.0
-    ) * 0.12;
+    /* --------------------------------------------------------
+       SWIRL PREMIUM
+    -------------------------------------------------------- */
 
+    engineRoot.rotation.z =
 
-engineRoot.rotation.x =
-    ENGINE_CONFIG
-        .modelRotation
-        .x
-
-    +
-
-    (
         Math.sin(
-            value * Math.PI * 2.0
+            value *
+            Math.PI *
+            2.0
         )
         *
-        0.08
-    );
+        0.12;
 
 
     /* --------------------------------------------------------
-       INCLINAISON CINÉMATIQUE
+       INCLINAISON LÉGÈRE
     -------------------------------------------------------- */
 
     engineRoot.rotation.x =
@@ -3683,85 +3676,135 @@ engineRoot.rotation.x =
 
         (
             Math.sin(
-                value * Math.PI
+                value *
+                Math.PI
             )
             *
             0.055
         );
 
 
-/* --------------------------------------------------------
-   TRAJECTOIRE VERTICALE PREMIUM
-   Le moteur descend progressivement pendant le scroll.
--------------------------------------------------------- */
+    /* --------------------------------------------------------
+       DESCENTE VERTICALE
+       DU HAUT VERS LE FOOTER
+    -------------------------------------------------------- */
 
-const verticalDrop =
-    THREE.MathUtils.lerp(
-        0,
-        -6.5,
-        value
-    );
+    const verticalDrop =
 
+        THREE.MathUtils.lerp(
 
-/* --------------------------------------------------------
-   MOUVEMENT LATÉRAL CINÉMATIQUE
--------------------------------------------------------- */
+            0,
 
-const lateralMotion =
-    Math.sin(
-        value * Math.PI * 1.5
-    ) * 0.55;
+            -14.0,
+
+            value
+
+        );
 
 
-/* --------------------------------------------------------
-   MOUVEMENT PROFONDEUR
--------------------------------------------------------- */
+    /* --------------------------------------------------------
+       MOUVEMENT LATÉRAL
+    -------------------------------------------------------- */
 
-const depthMotion =
-    Math.cos(
-        value * Math.PI * 1.25
-    ) * 0.45;
+    const lateralMotion =
 
-
-/* --------------------------------------------------------
-   PETIT MOUVEMENT ORBITAL
--------------------------------------------------------- */
-
-const orbitalX =
-    Math.sin(
-        value * Math.PI * 2.0
-    ) * 0.35;
-
-const orbitalY =
-    Math.cos(
-        value * Math.PI * 2.0
-    ) * 0.18;
+        Math.sin(
+            value *
+            Math.PI *
+            1.5
+        )
+        *
+        0.30;
 
 
-/* --------------------------------------------------------
-   POSITION FINALE
--------------------------------------------------------- */
+    /* --------------------------------------------------------
+       PROFONDEUR
+    -------------------------------------------------------- */
 
-engineRoot.position.x =
-    ENGINE_CONFIG.modelPosition.x
-    +
-    lateralMotion
-    +
-    orbitalX;
+    const depthMotion =
 
-
-engineRoot.position.y =
-    ENGINE_CONFIG.modelPosition.y
-    +
-    verticalDrop
-    +
-    orbitalY;
+        Math.cos(
+            value *
+            Math.PI *
+            1.25
+        )
+        *
+        0.30;
 
 
-engineRoot.position.z =
-    ENGINE_CONFIG.modelPosition.z
-    +
-    depthMotion;
+    /* --------------------------------------------------------
+       ORBITAL X
+    -------------------------------------------------------- */
+
+    const orbitalX =
+
+        Math.sin(
+            value *
+            Math.PI *
+            2.0
+        )
+        *
+        0.22;
+
+
+    /* --------------------------------------------------------
+       ORBITAL Y
+    -------------------------------------------------------- */
+
+    const orbitalY =
+
+        Math.cos(
+            value *
+            Math.PI *
+            2.0
+        )
+        *
+        0.12;
+
+
+    /* --------------------------------------------------------
+       POSITION FINALE
+    -------------------------------------------------------- */
+
+    engineRoot.position.x =
+
+        ENGINE_CONFIG
+            .modelPosition
+            .x
+
+        +
+
+        lateralMotion
+
+        +
+
+        orbitalX;
+
+
+    engineRoot.position.y =
+
+        ENGINE_CONFIG
+            .modelPosition
+            .y
+
+        +
+
+        verticalDrop
+
+        +
+
+        orbitalY;
+
+
+    engineRoot.position.z =
+
+        ENGINE_CONFIG
+            .modelPosition
+            .z
+
+        +
+
+        depthMotion;
 
 }
 
@@ -4471,51 +4514,45 @@ function createScrollExperience() {
        TIMELINE UNIQUE
     ======================================================== */
 
-    scrollTimeline =
+    
+scrollTimeline =
+    gsap.timeline({
 
-        gsap.timeline({
+        defaults: {
+            ease: "none"
+        },
 
-            defaults: {
+        scrollTrigger: {
 
-                ease:
-                    "none"
+            trigger:
+                trigger,
 
-            },
+            start:
+                SCROLL_CONFIG.start,
 
-            scrollTrigger: {
+            end:
+                () => `+=${Math.max(
+                    document.documentElement.scrollHeight,
+                    document.body.scrollHeight
+                ) - window.innerHeight}`,
 
-                trigger:
-                    trigger,
+            scrub:
+                SCROLL_CONFIG.scrub,
 
-                start:
-                    SCROLL_CONFIG.start,
+            invalidateOnRefresh:
+                true,
 
-                end:
-                    SCROLL_CONFIG.end,
+            onUpdate:
+                function(self) {
 
-                scrub:
-                    SCROLL_CONFIG.scrub,
+                    scrollState.velocity =
+                        self.getVelocity();
 
-                invalidateOnRefresh:
-                    true,
+                }
 
-              onUpdate:
-    function(self) {
+        }
 
-        scrollState.velocity =
-            self.getVelocity();
-
-
-        scrollState.progress =
-            getStorytellingProgress(
-                self.progress
-            );
-
-    }
-            }
-
-        });
-
+    });
 
     /* ========================================================
        UNE SEULE ANIMATION DE PROGRESSION
@@ -5719,15 +5756,16 @@ document.addEventListener(
 
 );
 
-
 /* ============================================================
    73 — REFRESH FINAL DE SCROLLTRIGGER
+   ------------------------------------------------------------
+   Refresh renforcé après chargement complet de la page.
+   Permet à ScrollTrigger de recalculer la hauteur réelle
+   du document et la position du storytelling 3D.
 ============================================================ */
 
 window.addEventListener(
-
     "load",
-
     function() {
 
         if (
@@ -5735,21 +5773,40 @@ window.addEventListener(
             "undefined"
         ) {
 
-            ScrollTrigger.refresh();
+            requestAnimationFrame(
+                function() {
+
+                    ScrollTrigger.refresh();
+
+                    requestAnimationFrame(
+                        function() {
+
+                            ScrollTrigger.refresh();
+
+                            if (
+                                scrollTimeline
+                            ) {
+
+                                scrollTimeline
+                                    .scrollTrigger
+                                    .refresh();
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
 
         }
 
-
         updateResponsiveEngine();
-
 
         updateTechnicalUI();
 
     }
-
 );
-
-
 /* ============================================================
    74 — API FINALE
    ------------------------------------------------------------
