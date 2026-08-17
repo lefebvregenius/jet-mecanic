@@ -199,7 +199,7 @@ targetModelSize: 2.52,
     renderer: {
 
         pixelRatioMaximum:
-    1.75,
+    1.35,
 
         powerPreference:
             "high-performance"
