@@ -146,7 +146,7 @@ const ENGINE_CONFIG = {
 
 autoScale: true,
 
-targetModelSize: 1.26,
+targetModelSize: 1.512,
 
 
     /* --------------------------------------------------------
@@ -4421,22 +4421,31 @@ function updateEngineExperience(
 /* ============================================================
    50 — CRÉATION DE LA TIMELINE UNIQUE
    ------------------------------------------------------------
-   IMPORTANT :
-   Cette fonction crée UNE SEULE timeline.
+   JET ENGINE — SCROLL IDENTIQUE À L'AVATAR DU PORTFOLIO
+   ------------------------------------------------------------
+   ✓ Une seule timeline GSAP
+   ✓ Un seul ScrollTrigger
+   ✓ Scroll de TOP → BOTTOM de toute la page
+   ✓ scrub: 1.5 comme l'avatar
+   ✓ Déplacement progressif du moteur jusqu'au footer
+   ✓ Rotation avant → arrière → avant
+   ✓ Mouvement latéral léger et premium
+   ✓ Caméra suit progressivement le moteur
+   ✓ Aucun nouveau renderer
+   ✓ Aucun nouveau GLB
+   ✓ Aucun nouveau requestAnimationFrame
 ============================================================ */
 
 function createScrollExperience() {
 
-    /* --------------------------------------------------------
-       Éviter une deuxième initialisation
-    -------------------------------------------------------- */
+    /* ========================================================
+       PROTECTION — PAS DE DOUBLE INITIALISATION
+    ======================================================== */
 
-    if (
-        scrollTimeline
-    ) {
+    if (scrollTimeline) {
 
         console.warn(
-            "⚠️ ScrollTimeline existe déjà."
+            "⚠️ Jet Engine ScrollTimeline existe déjà."
         );
 
         return;
@@ -4444,9 +4453,12 @@ function createScrollExperience() {
     }
 
 
+    /* ========================================================
+       VÉRIFICATION GSAP
+    ======================================================== */
+
     if (
-        typeof gsap ===
-        "undefined"
+        typeof gsap === "undefined"
     ) {
 
         console.error(
@@ -4458,9 +4470,12 @@ function createScrollExperience() {
     }
 
 
+    /* ========================================================
+       VÉRIFICATION SCROLLTRIGGER
+    ======================================================== */
+
     if (
-        typeof ScrollTrigger ===
-        "undefined"
+        typeof ScrollTrigger === "undefined"
     ) {
 
         console.error(
@@ -4471,6 +4486,10 @@ function createScrollExperience() {
 
     }
 
+
+    /* ========================================================
+       VÉRIFICATION DU MOTEUR
+    ======================================================== */
 
     if (
         !engineRoot ||
@@ -4487,144 +4506,604 @@ function createScrollExperience() {
 
 
     /* ========================================================
-       TRIGGER UNIQUE
+       SAUVEGARDE DE LA POSITION INITIALE
+       --------------------------------------------------------
+       On récupère la vraie position du modèle.
+       Cela évite de casser ta configuration actuelle.
     ======================================================== */
 
-    const trigger =
-        getScrollTriggerElement();
+    const startX =
+        engineRoot.position.x;
+
+    const startY =
+        engineRoot.position.y;
+
+    const startZ =
+        engineRoot.position.z;
 
 
     /* ========================================================
-       PROXY DE PROGRESSION
-       --------------------------------------------------------
-       Un simple objet permet à GSAP d'animer une seule valeur
-       0 → 1. Cette valeur devient le scénario du moteur.
+       SAUVEGARDE DE LA ROTATION INITIALE
     ======================================================== */
 
-    const story =
-        {
+    const startRotationX =
+        engineRoot.rotation.x;
 
-            progress:
-                0
+    const startRotationY =
+        engineRoot.rotation.y;
 
-        };
+    const startRotationZ =
+        engineRoot.rotation.z;
+
+
+    /* ========================================================
+       SAUVEGARDE DE LA CAMÉRA
+    ======================================================== */
+
+    const startCameraX =
+        camera.position.x;
+
+    const startCameraY =
+        camera.position.y;
+
+    const startCameraZ =
+        camera.position.z;
 
 
     /* ========================================================
        TIMELINE UNIQUE
+       --------------------------------------------------------
+       EXACTEMENT LA MÊME LOGIQUE QUE L'AVATAR :
+
+           trigger:"body"
+           start:"top top"
+           end:"bottom bottom"
+           scrub:1.5
+           invalidateOnRefresh:true
     ======================================================== */
 
-    
-scrollTimeline =
-    gsap.timeline({
+    scrollTimeline =
+        gsap.timeline({
 
-        defaults: {
-            ease: "none"
-        },
+            defaults: {
 
-        scrollTrigger: {
+                ease: "none"
 
-            trigger:
-                trigger,
+            },
 
-            start:
-                SCROLL_CONFIG.start,
+            scrollTrigger: {
 
-            end:
-                () => `+=${Math.max(
-                    document.documentElement.scrollHeight,
-                    document.body.scrollHeight
-                ) - window.innerHeight}`,
+                trigger: "body",
 
-            scrub:
-                SCROLL_CONFIG.scrub,
+                start: "top top",
 
-            invalidateOnRefresh:
-                true,
+                end: "bottom bottom",
 
-            onUpdate:
-                function(self) {
+                scrub: 1.5,
 
-                    scrollState.velocity =
-                        self.getVelocity();
+                invalidateOnRefresh: true,
 
-                }
+                onUpdate:
+                    function(self) {
 
-        }
+                        scrollState.velocity =
+                            self.getVelocity();
 
-    });
+                        scrollProgress =
+                            self.progress;
+
+                        scrollState.progress =
+                            self.progress;
+
+                    }
+
+            }
+
+        });
+
 
     /* ========================================================
-       UNE SEULE ANIMATION DE PROGRESSION
+       ÉTAPE 1
+       --------------------------------------------------------
+       HERO → PREMIÈRE SECTION
+
+       Le moteur commence à descendre.
+       Rotation douce.
     ======================================================== */
 
- /* ========================================================
-   PROGRESSION DU STORYTELLING
-   --------------------------------------------------------
-   La timeline virtuelle représente toute la hauteur
-   de la page.
+    scrollTimeline
 
-   0 → 10 %
-       moteur stable.
+        .to(
 
-   10 → 100 %
-       animation complète.
-======================================================== */
+            engineRoot.position,
 
-scrollTimeline.to(
+            {
 
-    story,
+                x:
+                    startX + 0.25,
 
-    {
+                y:
+                    startY - 2.5,
 
-        progress:
-            1,
+                z:
+                    startZ + 0.10,
 
-        duration:
-            1,
+                duration: 1
 
-        ease:
-            "none",
+            }
 
-        onUpdate:
-            function() {
+        )
 
-                const storytellingProgress =
-                    getStorytellingProgress(
-                        story.progress
-                    );
+        .to(
+
+            engineRoot.rotation,
+
+            {
+
+                x:
+                    startRotationX +
+                    Math.PI * 0.03,
+
+                y:
+                    startRotationY +
+                    Math.PI * 0.50,
+
+                z:
+                    startRotationZ +
+                    Math.PI * 0.025,
+
+                duration: 1
+
+            },
+
+            "<"
+
+        )
+
+        .to(
+
+            camera.position,
+
+            {
+
+                x:
+                    startCameraX,
+
+                y:
+                    startCameraY,
+
+                z:
+                    startCameraZ - 0.45,
+
+                duration: 1
+
+            },
+
+            "<"
+
+        );
 
 
-                updateEngineExperience(
-                    storytellingProgress
+    /* ========================================================
+       ÉTAPE 2
+       --------------------------------------------------------
+       PREMIÈRE SECTION → MILIEU
+
+       Rotation vers 180°.
+       L'arrière du moteur devient visible.
+    ======================================================== */
+
+    scrollTimeline
+
+        .to(
+
+            engineRoot.position,
+
+            {
+
+                x:
+                    startX - 0.20,
+
+                y:
+                    startY - 5.5,
+
+                z:
+                    startZ - 0.15,
+
+                duration: 1
+
+            }
+
+        )
+
+        .to(
+
+            engineRoot.rotation,
+
+            {
+
+                x:
+                    startRotationX -
+                    Math.PI * 0.02,
+
+                y:
+                    startRotationY +
+                    Math.PI,
+
+                z:
+                    startRotationZ -
+                    Math.PI * 0.035,
+
+                duration: 1
+
+            },
+
+            "<"
+
+        )
+
+        .to(
+
+            camera.position,
+
+            {
+
+                x:
+                    startCameraX - 0.25,
+
+                y:
+                    startCameraY - 0.15,
+
+                z:
+                    startCameraZ - 0.80,
+
+                duration: 1
+
+            },
+
+            "<"
+
+        );
+
+
+    /* ========================================================
+       ÉTAPE 3
+       --------------------------------------------------------
+       MILIEU → BAS
+
+       Le moteur poursuit sa rotation.
+       On traverse progressivement l'arrière.
+    ======================================================== */
+
+    scrollTimeline
+
+        .to(
+
+            engineRoot.position,
+
+            {
+
+                x:
+                    startX + 0.20,
+
+                y:
+                    startY - 8.5,
+
+                z:
+                    startZ + 0.05,
+
+                duration: 1
+
+            }
+
+        )
+
+        .to(
+
+            engineRoot.rotation,
+
+            {
+
+                x:
+                    startRotationX +
+                    Math.PI * 0.025,
+
+                y:
+                    startRotationY +
+                    Math.PI * 1.50,
+
+                z:
+                    startRotationZ +
+                    Math.PI * 0.04,
+
+                duration: 1
+
+            },
+
+            "<"
+
+        )
+
+        .to(
+
+            camera.position,
+
+            {
+
+                x:
+                    startCameraX + 0.20,
+
+                y:
+                    startCameraY + 0.05,
+
+                z:
+                    startCameraZ - 0.50,
+
+                duration: 1
+
+            },
+
+            "<"
+
+        );
+
+
+    /* ========================================================
+       ÉTAPE 4
+       --------------------------------------------------------
+       BAS → FOOTER
+
+       Rotation complète :
+       
+       0°
+       ↓
+       180° = arrière
+       ↓
+       360° = avant
+
+       Le moteur arrive réellement au footer.
+    ======================================================== */
+
+    scrollTimeline
+
+        .to(
+
+            engineRoot.position,
+
+            {
+
+                x:
+                    startX,
+
+                y:
+                    startY - 12.5,
+
+                z:
+                    startZ,
+
+                duration: 1
+
+            }
+
+        )
+
+        .to(
+
+            engineRoot.rotation,
+
+            {
+
+                x:
+                    startRotationX,
+
+                y:
+                    startRotationY +
+                    Math.PI * 2,
+
+                z:
+                    startRotationZ,
+
+                duration: 1
+
+            },
+
+            "<"
+
+        )
+
+        .to(
+
+            camera.position,
+
+            {
+
+                x:
+                    startCameraX,
+
+                y:
+                    startCameraY,
+
+                z:
+                    startCameraZ,
+
+                duration: 1
+
+            },
+
+            "<"
+
+        );
+
+
+    /* ========================================================
+       CALLBACK CENTRAL
+       --------------------------------------------------------
+       Synchronise uniquement les variables d'état.
+       Pas de deuxième animation.
+    ======================================================== */
+
+    scrollTimeline.eventCallback(
+
+        "onUpdate",
+
+        function() {
+
+            if (
+                !scrollTimeline
+            ) {
+
+                return;
+
+            }
+
+
+            const progress =
+                scrollTimeline.progress();
+
+
+            scrollProgress =
+                THREE.MathUtils.clamp(
+                    progress,
+                    0,
+                    1
+                );
+
+
+            scrollState.progress =
+                scrollProgress;
+
+
+            /* -----------------------------------------------
+               LOOK AT DU MOTEUR
+               ----------------------------------------------- */
+
+            if (
+                camera &&
+                engineRoot
+            ) {
+
+                camera.lookAt(
+
+                    engineRoot.position.x,
+
+                    engineRoot.position.y,
+
+                    engineRoot.position.z
+
                 );
 
             }
 
-    }
+        }
 
-);
+    );
+
 
     /* ========================================================
        POSITION INITIALE
+       --------------------------------------------------------
+       Retour à l'état exact du modèle avant le scroll.
     ======================================================== */
 
-    updateEngineExperience(
-        0
+    engineRoot.position.set(
+
+        startX,
+
+        startY,
+
+        startZ
+
     );
 
 
-    console.log(
-        "✓ UNE seule timeline GSAP créée."
+    engineRoot.rotation.set(
+
+        startRotationX,
+
+        startRotationY,
+
+        startRotationZ
+
     );
 
 
+    camera.position.set(
+
+        startCameraX,
+
+        startCameraY,
+
+        startCameraZ
+
+    );
+
+
+    /* ========================================================
+       LOOK AT INITIAL
+    ======================================================== */
+
+    camera.lookAt(
+
+        engineRoot.position.x,
+
+        engineRoot.position.y,
+
+        engineRoot.position.z
+
+    );
+
+
+    /* ========================================================
+       REFRESH
+       --------------------------------------------------------
+       Important pour que ScrollTrigger recalcule la hauteur
+       réelle de la page après le chargement du GLB.
+    ======================================================== */
+
+    requestAnimationFrame(
+
+        function() {
+
+            ScrollTrigger.refresh();
+
+        }
+
+    );
+
+
+    /* ========================================================
+       LOGS
+    ======================================================== */
+
     console.log(
-        "✓ UNE seul ScrollTrigger créé."
+        "✓ Jet Engine ScrollTimeline créée."
+    );
+
+    console.log(
+        "✓ Trigger : BODY"
+    );
+
+    console.log(
+        "✓ Start : TOP TOP"
+    );
+
+    console.log(
+        "✓ End : BOTTOM BOTTOM"
+    );
+
+    console.log(
+        "✓ Scrub : 1.5"
+    );
+
+    console.log(
+        "✓ Rotation : AVANT → ARRIÈRE → AVANT"
+    );
+
+    console.log(
+        "✓ Déplacement : HERO → FOOTER"
     );
 
 }
-
 
 /* ============================================================
    51 — API PUBLIQUE DU STORYTELLING
