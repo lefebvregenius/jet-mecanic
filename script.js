@@ -131,7 +131,7 @@ const ENGINE_CONFIG = {
 
         x: 0,
 
-        y: Math.PI,
+        y: 0,
 
         z: 0
 
