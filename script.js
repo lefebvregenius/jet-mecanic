@@ -291,12 +291,7 @@ function initializeThreeScene() {
     scene =
         new THREE.Scene();
 
-
-    scene.background =
-        new THREE.Color(
-            0x030507
-        );
-
+scene.background = null;
 
     /* ========================================================
        HORLOGE
@@ -3608,7 +3603,11 @@ function updateCameraTarget(
 
 /* ============================================================
    43 — ANIMATION DU MOTEUR
-============================================================ */
+   ------------------------------------------------------------
+   Le moteur reste toujours dans le champ.
+   Le scroll contrôle principalement la rotation.
+   ============================================================ */
+
 function updateEngineAnimation(
     progress
 ) {
@@ -3618,6 +3617,7 @@ function updateEngineAnimation(
         return;
 
     }
+
 
     const value =
         THREE.MathUtils.clamp(
@@ -3629,37 +3629,35 @@ function updateEngineAnimation(
 
     /* --------------------------------------------------------
        ROTATION PRINCIPALE
+       --------------------------------------------------------
+       Départ = vue arrière.
+       Le moteur tourne progressivement pendant le scroll.
     -------------------------------------------------------- */
 
     engineRoot.rotation.y =
-        THREE.MathUtils.lerp(
-
-            SCROLL_CONFIG
-                .rotation
-                .start,
-
-            SCROLL_CONFIG
-                .rotation
-                .end,
-
+        SCROLL_CONFIG
+            .rotation
+            .start
+        +
+        (
+            Math.PI * 2.0
+            *
             value
-
         );
 
 
     /* --------------------------------------------------------
        SWIRL PREMIUM
-    -------------------------------------------------------- */
+       -------------------------------------------------------- */
 
     engineRoot.rotation.z =
-
         Math.sin(
             value *
             Math.PI *
             2.0
         )
         *
-        0.12;
+        0.08;
 
 
     /* --------------------------------------------------------
@@ -3667,93 +3665,54 @@ function updateEngineAnimation(
     -------------------------------------------------------- */
 
     engineRoot.rotation.x =
-
         ENGINE_CONFIG
             .modelRotation
             .x
-
         +
-
         (
             Math.sin(
                 value *
                 Math.PI
             )
             *
-            0.055
+            0.045
         );
 
 
     /* --------------------------------------------------------
-       DESCENTE VERTICALE
-       DU HAUT VERS LE FOOTER
-    -------------------------------------------------------- */
-
-    const verticalDrop =
-
-        THREE.MathUtils.lerp(
-
-            0,
-
-            -14.0,
-
-            value
-
-        );
-
-
-    /* --------------------------------------------------------
-       MOUVEMENT LATÉRAL
-    -------------------------------------------------------- */
+       MOUVEMENT HORIZONTAL TRÈS LÉGER
+       -------------------------------------------------------- */
 
     const lateralMotion =
-
         Math.sin(
             value *
             Math.PI *
             1.5
         )
         *
-        0.30;
+        0.18;
 
 
     /* --------------------------------------------------------
-       PROFONDEUR
+       PROFONDEUR LÉGÈRE
     -------------------------------------------------------- */
 
     const depthMotion =
-
         Math.cos(
             value *
             Math.PI *
             1.25
         )
         *
-        0.30;
+        0.18;
 
 
     /* --------------------------------------------------------
-       ORBITAL X
+       PETITE ORBITE
     -------------------------------------------------------- */
 
     const orbitalX =
-
         Math.sin(
-            value *
-            Math.PI *
-            2.0
-        )
-        *
-        0.22;
-
-
-    /* --------------------------------------------------------
-       ORBITAL Y
-    -------------------------------------------------------- */
-
-    const orbitalY =
-
-        Math.cos(
             value *
             Math.PI *
             2.0
@@ -3762,52 +3721,50 @@ function updateEngineAnimation(
         0.12;
 
 
+    const orbitalY =
+        Math.cos(
+            value *
+            Math.PI *
+            2.0
+        )
+        *
+        0.08;
+
+
     /* --------------------------------------------------------
-       POSITION FINALE
+       POSITION
+       --------------------------------------------------------
+       IMPORTANT :
+       aucune descente de -14.
+       Le moteur reste dans la zone visible.
     -------------------------------------------------------- */
 
     engineRoot.position.x =
-
         ENGINE_CONFIG
             .modelPosition
             .x
-
         +
-
         lateralMotion
-
         +
-
         orbitalX;
 
 
     engineRoot.position.y =
-
         ENGINE_CONFIG
             .modelPosition
             .y
-
         +
-
-        verticalDrop
-
-        +
-
         orbitalY;
 
 
     engineRoot.position.z =
-
         ENGINE_CONFIG
             .modelPosition
             .z
-
         +
-
         depthMotion;
 
 }
-
 
 /* ============================================================
    44 — VITESSE DU MOTEUR
@@ -3833,10 +3790,10 @@ function updateEngineSpeed(
     -------------------------------------------------------- */
 
     const acceleration =
-        THREE.MathUtils.pow(
-            value,
-            0.62
-        );
+       Math.pow(
+    value,
+    0.62
+);
 
 
     scrollState.engineSpeed =

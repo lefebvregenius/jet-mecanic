@@ -1316,28 +1316,31 @@ p {
         .12em;
 
 }
-
-
 /* ============================================================
-   THREE.JS SCENE
-============================================================ */
+   THREE.JS — MOTEUR TOUJOURS VISIBLE
+   ============================================================ */
 
 .scene-container {
 
     position:
-        absolute;
+        fixed;
 
     inset:
         0;
 
+    width:
+        100vw;
+
+    height:
+        100vh;
+
     z-index:
-        5;
+        10;
 
     pointer-events:
         none;
 
 }
-
 
 #three-canvas {
 
@@ -1353,8 +1356,10 @@ p {
     outline:
         none;
 
-}
+    pointer-events:
+        none;
 
+}
 
 /* ============================================================
    HERO HUD
