@@ -4209,3 +4209,1972 @@ body::after {
 
 }
 
+
+
+/* ============================================================
+   GRALWEBS ENGINE EXPLORER
+   PREMIUM AEROSPACE UI
+============================================================ */
+
+:root {
+
+    --engine-bg: #030303;
+    --engine-panel: rgba(12, 12, 14, .88);
+    --engine-border: rgba(255,255,255,.10);
+    --engine-red: #ff2b2b;
+    --engine-gold: #d6ad62;
+    --engine-text: #f4f4f4;
+    --engine-muted: #8b8b91;
+
+}
+
+
+/* ============================================================
+   HERO
+============================================================ */
+
+.lab-hero {
+
+    position: relative;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    padding: 160px 7vw 100px;
+    overflow: hidden;
+
+}
+
+.lab-grid {
+
+    position: absolute;
+    inset: 0;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.025) 1px,
+            transparent 1px
+        );
+
+    background-size: 70px 70px;
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black,
+            transparent
+        );
+
+    pointer-events: none;
+
+}
+
+.lab-hero-content {
+
+    position: relative;
+    z-index: 2;
+    max-width: 760px;
+
+}
+
+.lab-eyebrow {
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    font-size: 10px;
+    letter-spacing: .25em;
+    color: var(--engine-muted);
+
+    margin-bottom: 30px;
+
+}
+
+.lab-dot {
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: var(--engine-red);
+
+    box-shadow:
+        0 0 18px var(--engine-red);
+
+}
+
+.lab-hero h1 {
+
+    margin: 0;
+
+    font-size: clamp(60px, 10vw, 150px);
+
+    line-height: .8;
+
+    letter-spacing: -.06em;
+
+    font-weight: 700;
+
+}
+
+.lab-hero h1 span {
+
+    display: block;
+
+    color: transparent;
+
+    -webkit-text-stroke:
+        1px rgba(255,255,255,.3);
+
+}
+
+.lab-lead {
+
+    max-width: 620px;
+
+    margin-top: 45px;
+
+    color: #999;
+
+    font-size: 16px;
+
+    line-height: 1.8;
+
+}
+
+.hero-metrics {
+
+    display: flex;
+    gap: 50px;
+
+    margin-top: 45px;
+
+}
+
+.hero-metrics div {
+
+    display: flex;
+    flex-direction: column;
+
+}
+
+.hero-metrics span {
+
+    color: var(--engine-red);
+
+    font-size: 10px;
+
+}
+
+.hero-metrics strong {
+
+    font-size: 24px;
+
+}
+
+.hero-metrics small {
+
+    color: #666;
+
+    font-size: 8px;
+
+    letter-spacing: .2em;
+
+}
+
+.hero-system {
+
+    position: absolute;
+
+    right: 7vw;
+    bottom: 70px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+
+    font-size: 9px;
+    letter-spacing: .2em;
+
+    color: #666;
+
+}
+
+.hero-system strong {
+
+    color: #ddd;
+
+}
+
+.hero-system .online {
+
+    color: #70d890;
+
+}
+
+
+/* ============================================================
+   GLOBAL SECTIONS
+============================================================ */
+
+.engine-viewer-section,
+.technical-section,
+.data-section,
+.diagram-section,
+.materials-section,
+.energy-section,
+.gallery-section,
+.education-section {
+
+    position: relative;
+
+    padding: 120px 7vw;
+
+    border-top:
+        1px solid rgba(255,255,255,.07);
+
+}
+
+.section-header {
+
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+
+    margin-bottom: 60px;
+
+}
+
+.section-header > div {
+
+    max-width: 700px;
+
+}
+
+.section-index {
+
+    display: block;
+
+    margin-bottom: 18px;
+
+    color: var(--engine-red);
+
+    font-size: 9px;
+
+    letter-spacing: .25em;
+
+}
+
+.section-header h2 {
+
+    margin: 0;
+
+    font-size: clamp(42px, 6vw, 86px);
+
+    line-height: .9;
+
+    letter-spacing: -.05em;
+
+}
+
+.section-header h2 span {
+
+    color: transparent;
+
+    -webkit-text-stroke:
+        1px rgba(255,255,255,.35);
+
+}
+
+.section-header p {
+
+    max-width: 400px;
+
+    color: #777;
+
+    line-height: 1.8;
+
+}
+
+
+/* ============================================================
+   VIEWER
+============================================================ */
+
+.engine-viewer-shell {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        350px;
+
+    min-height: 680px;
+
+    border:
+        1px solid var(--engine-border);
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(255,40,40,.07),
+            transparent 50%
+        );
+
+}
+
+.engine-viewer {
+
+    position: relative;
+
+    min-height: 680px;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle,
+            #111 0%,
+            #050505 50%,
+            #020202 100%
+        );
+
+}
+
+#engine-canvas {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    cursor:
+        grab;
+
+}
+
+#engine-canvas:active {
+
+    cursor:
+        grabbing;
+
+}
+
+
+/* ============================================================
+   LOADER
+============================================================ */
+
+.engine-loading {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 20;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #030303;
+
+    transition:
+        opacity .7s ease,
+        visibility .7s ease;
+
+}
+
+.engine-loading.loaded {
+
+    opacity: 0;
+
+    visibility: hidden;
+
+}
+
+.loader-ring {
+
+    width: 55px;
+    height: 55px;
+
+    border:
+        1px solid rgba(255,255,255,.15);
+
+    border-top-color:
+        var(--engine-red);
+
+    border-radius: 50%;
+
+    animation:
+        engine-spin 1s linear infinite;
+
+    margin-bottom: 25px;
+
+}
+
+@keyframes engine-spin {
+
+    to {
+        transform:
+            rotate(360deg);
+    }
+
+}
+
+.engine-loading strong {
+
+    font-size: 12px;
+
+    letter-spacing: .25em;
+
+}
+
+.engine-loading > span {
+
+    margin-top: 8px;
+
+    color: #555;
+
+    font-size: 8px;
+
+    letter-spacing: .2em;
+
+}
+
+.loading-progress {
+
+    width: 180px;
+
+    height: 2px;
+
+    margin-top: 25px;
+
+    background: #222;
+
+}
+
+.loading-progress i {
+
+    display: block;
+
+    width: 0%;
+
+    height: 100%;
+
+    background: var(--engine-red);
+
+    transition: width .2s ease;
+
+}
+
+
+/* ============================================================
+   HUD
+============================================================ */
+
+.viewer-hud {
+
+    position: absolute;
+
+    z-index: 5;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    padding: 15px;
+
+    font-size: 8px;
+
+    letter-spacing: .18em;
+
+    pointer-events: none;
+
+}
+
+.viewer-top-left {
+
+    top: 20px;
+    left: 20px;
+
+}
+
+.viewer-top-right {
+
+    top: 20px;
+    right: 20px;
+
+    text-align: right;
+
+}
+
+.viewer-hud span {
+
+    color: #555;
+
+}
+
+.viewer-hud strong {
+
+    color: #ccc;
+
+}
+
+
+/* ============================================================
+   VIEWER CONTROLS
+============================================================ */
+
+.viewer-controls {
+
+    position: absolute;
+
+    left: 20px;
+    bottom: 20px;
+
+    z-index: 10;
+
+    display: flex;
+
+    gap: 7px;
+
+}
+
+.viewer-controls button,
+.audio-controls button {
+
+    border:
+        1px solid rgba(255,255,255,.13);
+
+    background:
+        rgba(0,0,0,.55);
+
+    color: #ccc;
+
+    padding: 11px 14px;
+
+    font-size: 8px;
+
+    letter-spacing: .15em;
+
+    cursor: pointer;
+
+    transition:
+        .25s ease;
+
+}
+
+.viewer-controls button:hover,
+.audio-controls button:hover {
+
+    border-color:
+        var(--engine-red);
+
+    color: white;
+
+}
+
+.viewer-controls button.active {
+
+    background:
+        var(--engine-red);
+
+    color: white;
+
+}
+
+
+/* ============================================================
+   VIEWER HINT
+============================================================ */
+
+.viewer-hint {
+
+    position: absolute;
+
+    right: 20px;
+    bottom: 20px;
+
+    z-index: 5;
+
+    display: flex;
+
+    gap: 15px;
+
+    color: #555;
+
+    font-size: 7px;
+
+    letter-spacing: .15em;
+
+    pointer-events: none;
+
+}
+
+
+/* ============================================================
+   HOTSPOTS
+============================================================ */
+
+.hotspot-container {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 15;
+
+    pointer-events: none;
+
+}
+
+.engine-hotspot {
+
+    position: absolute;
+
+    width: 34px;
+    height: 34px;
+
+    margin-left: -17px;
+    margin-top: -17px;
+
+    border:
+        1px solid rgba(255,255,255,.7);
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,30,30,.12);
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 9px;
+
+    cursor: pointer;
+
+    pointer-events: auto;
+
+    transition:
+        transform .2s ease,
+        background .2s ease;
+
+    box-shadow:
+        0 0 25px rgba(255,30,30,.25);
+
+}
+
+.engine-hotspot::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: -7px;
+
+    border:
+        1px solid rgba(255,30,30,.35);
+
+    border-radius: 50%;
+
+    animation:
+        hotspot-pulse 2s infinite;
+
+}
+
+.engine-hotspot:hover {
+
+    transform:
+        scale(1.2);
+
+    background:
+        rgba(255,30,30,.5);
+
+}
+
+@keyframes hotspot-pulse {
+
+    50% {
+
+        transform:
+            scale(1.25);
+
+        opacity: .2;
+
+    }
+
+}
+
+
+/* ============================================================
+   CONTROL PANEL
+============================================================ */
+
+.engine-control-panel {
+
+    padding: 35px;
+
+    border-left:
+        1px solid rgba(255,255,255,.08);
+
+    background:
+        rgba(10,10,11,.9);
+
+}
+
+.panel-label {
+
+    color: #555;
+
+    font-size: 8px;
+
+    letter-spacing: .25em;
+
+}
+
+.panel-title {
+
+    margin-top: 10px;
+
+    font-size: 25px;
+
+    line-height: 1;
+
+}
+
+.panel-title strong {
+
+    display: block;
+
+    color: transparent;
+
+    -webkit-text-stroke:
+        1px rgba(255,255,255,.4);
+
+}
+
+
+/* ============================================================
+   AUDIO
+============================================================ */
+
+.audio-module {
+
+    margin-top: 45px;
+
+    padding:
+        20px;
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    background:
+        rgba(255,255,255,.025);
+
+}
+
+.audio-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    font-size: 8px;
+
+    letter-spacing: .15em;
+
+}
+
+#audio-state {
+
+    color: var(--engine-red);
+
+}
+
+.audio-visualizer {
+
+    height: 70px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 5px;
+
+}
+
+.audio-visualizer i {
+
+    display: block;
+
+    width: 3px;
+
+    height: 15px;
+
+    background: var(--engine-red);
+
+    transform-origin: center;
+
+}
+
+.audio-module.playing
+.audio-visualizer i {
+
+    animation:
+        audio-bars .7s ease-in-out infinite alternate;
+
+}
+
+.audio-visualizer i:nth-child(2) {
+    animation-delay: -.2s;
+}
+
+.audio-visualizer i:nth-child(3) {
+    animation-delay: -.5s;
+}
+
+.audio-visualizer i:nth-child(4) {
+    animation-delay: -.3s;
+}
+
+.audio-visualizer i:nth-child(5) {
+    animation-delay: -.7s;
+}
+
+@keyframes audio-bars {
+
+    to {
+
+        transform:
+            scaleY(3.5);
+
+    }
+
+}
+
+.audio-controls {
+
+    display: flex;
+
+    gap: 7px;
+
+}
+
+#engine-volume {
+
+    width: 100%;
+
+    margin-top: 15px;
+
+}
+
+
+/* ============================================================
+   SELECTED SYSTEM
+============================================================ */
+
+.selected-system {
+
+    margin-top: 30px;
+
+}
+
+.selected-system span {
+
+    color: #555;
+
+    font-size: 8px;
+
+    letter-spacing: .15em;
+
+}
+
+.selected-system strong {
+
+    display: block;
+
+    margin-top: 8px;
+
+    font-size: 20px;
+
+}
+
+.selected-system p {
+
+    color: #777;
+
+    font-size: 12px;
+
+    line-height: 1.7;
+
+}
+
+
+/* ============================================================
+   INDICATORS
+============================================================ */
+
+.technical-indicators {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    margin-top: 30px;
+
+    border-top:
+        1px solid rgba(255,255,255,.08);
+
+}
+
+.technical-indicators div {
+
+    padding:
+        15px 0;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.08);
+
+}
+
+.technical-indicators span {
+
+    display: block;
+
+    color: #555;
+
+    font-size: 7px;
+
+    letter-spacing: .15em;
+
+}
+
+.technical-indicators strong {
+
+    display: block;
+
+    margin-top: 5px;
+
+    font-size: 10px;
+
+}
+
+
+/* ============================================================
+   TECH CARDS
+============================================================ */
+
+.technical-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 1px;
+
+    background:
+        rgba(255,255,255,.08);
+
+}
+
+.tech-card {
+
+    min-height: 330px;
+
+    padding: 35px;
+
+    background:
+        #070707;
+
+    transition:
+        transform .3s ease,
+        background .3s ease;
+
+}
+
+.tech-card:hover {
+
+    transform:
+        translateY(-6px);
+
+    background:
+        #0c0c0c;
+
+}
+
+.tech-number {
+
+    color: var(--engine-red);
+
+    font-size: 10px;
+
+}
+
+.tech-category {
+
+    display: block;
+
+    margin-top: 35px;
+
+    color: #555;
+
+    font-size: 8px;
+
+    letter-spacing: .15em;
+
+}
+
+.tech-card h3 {
+
+    font-size: 28px;
+
+    margin: 8px 0 20px;
+
+}
+
+.tech-card p {
+
+    color: #777;
+
+    line-height: 1.7;
+
+    font-size: 13px;
+
+}
+
+.tech-spec {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-top: 35px;
+
+    padding-top: 15px;
+
+    border-top:
+        1px solid rgba(255,255,255,.08);
+
+    font-size: 8px;
+
+}
+
+.tech-spec span {
+
+    color: #555;
+
+}
+
+.tech-spec strong {
+
+    color: #ddd;
+
+}
+
+
+/* ============================================================
+   DATA
+============================================================ */
+
+.data-warning {
+
+    display: flex;
+
+    gap: 20px;
+
+    padding: 20px;
+
+    margin-bottom: 40px;
+
+    border-left:
+        2px solid var(--engine-red);
+
+    background:
+        rgba(255,30,30,.04);
+
+}
+
+.data-warning strong {
+
+    color: var(--engine-red);
+
+    font-size: 9px;
+
+    letter-spacing: .15em;
+
+}
+
+.data-warning span {
+
+    color: #777;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+
+}
+
+.engine-data-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 20px;
+
+}
+
+.data-card {
+
+    padding: 35px;
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.035),
+            rgba(255,255,255,.01)
+        );
+
+}
+
+.data-card-head {
+
+    display: flex;
+
+    justify-content: space-between;
+
+}
+
+.data-card-head span {
+
+    color: #555;
+
+    font-size: 8px;
+
+    letter-spacing: .15em;
+
+}
+
+.data-card-head strong {
+
+    color: #ddd;
+
+}
+
+.big-spec {
+
+    margin:
+        45px 0;
+
+}
+
+.big-spec strong {
+
+    display: block;
+
+    font-size: clamp(45px, 5vw, 70px);
+
+    letter-spacing: -.05em;
+
+}
+
+.big-spec span {
+
+    color: #666;
+
+    font-size: 9px;
+
+    letter-spacing: .15em;
+
+}
+
+.data-card dl {
+
+    margin: 0;
+
+}
+
+.data-card dl div {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 14px 0;
+
+    border-top:
+        1px solid rgba(255,255,255,.06);
+
+}
+
+.data-card dt {
+
+    color: #555;
+
+    font-size: 8px;
+
+}
+
+.data-card dd {
+
+    margin: 0;
+
+    color: #ddd;
+
+    font-size: 9px;
+
+}
+
+.data-source {
+
+    margin-top: 30px;
+
+    color: var(--engine-red);
+
+    font-size: 7px;
+
+    letter-spacing: .2em;
+
+}
+
+
+/* ============================================================
+   AIRFLOW DIAGRAM
+============================================================ */
+
+.airflow-diagram {
+
+    position: relative;
+
+    min-height: 420px;
+
+    overflow: hidden;
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            rgba(255,40,40,.08),
+            transparent 60%
+        );
+
+}
+
+.airflow-engine-shape {
+
+    position: absolute;
+
+    left: 8%;
+    right: 8%;
+    top: 45%;
+
+    height: 80px;
+
+    transform:
+        translateY(-50%);
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    border:
+        1px solid rgba(255,255,255,.15);
+
+    border-radius:
+        50px;
+
+    overflow: hidden;
+
+}
+
+.airflow-zone {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-right:
+        1px solid rgba(255,255,255,.1);
+
+    color: #aaa;
+
+    font-size: 8px;
+
+    letter-spacing: .15em;
+
+}
+
+.airflow-line {
+
+    position: absolute;
+
+    left: 8%;
+    right: 8%;
+
+    top: calc(45% - 2px);
+
+    height: 4px;
+
+    pointer-events: none;
+
+}
+
+.airflow-line span {
+
+    position: absolute;
+
+    width: 20px;
+    height: 20px;
+
+    border:
+        1px solid var(--engine-red);
+
+    border-radius: 50%;
+
+    transform:
+        translateY(-8px);
+
+    animation:
+        airflow-move 3s linear infinite;
+
+}
+
+.airflow-line span:nth-child(2) {
+    animation-delay: -.6s;
+}
+
+.airflow-line span:nth-child(3) {
+    animation-delay: -1.2s;
+}
+
+.airflow-line span:nth-child(4) {
+    animation-delay: -1.8s;
+}
+
+.airflow-line span:nth-child(5) {
+    animation-delay: -2.4s;
+}
+
+@keyframes airflow-move {
+
+    from {
+        left: 0;
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    to {
+        left: 100%;
+        opacity: 0;
+    }
+
+}
+
+.airflow-label {
+
+    position: absolute;
+
+    top: 25%;
+
+    color: #666;
+
+    font-size: 8px;
+
+    letter-spacing: .15em;
+
+}
+
+.airflow-label.intake {
+    left: 8%;
+}
+
+.airflow-label.fan {
+    left: 27%;
+}
+
+.airflow-label.compressor {
+    left: 42%;
+}
+
+.airflow-label.combustor {
+    left: 57%;
+}
+
+.airflow-label.turbine {
+    left: 72%;
+}
+
+.airflow-label.exhaust {
+    right: 8%;
+}
+
+
+/* ============================================================
+   MATERIALS
+============================================================ */
+
+.materials-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 1px;
+
+    background:
+        rgba(255,255,255,.08);
+
+}
+
+.materials-grid article {
+
+    min-height: 300px;
+
+    padding: 30px;
+
+    background: #070707;
+
+}
+
+.materials-grid article > span {
+
+    color: var(--engine-red);
+
+    font-size: 9px;
+
+}
+
+.materials-grid h3 {
+
+    margin-top: 60px;
+
+}
+
+.materials-grid p {
+
+    color: #777;
+
+    font-size: 12px;
+
+    line-height: 1.7;
+
+}
+
+.materials-grid strong {
+
+    display: block;
+
+    margin-top: 25px;
+
+    color: #bbb;
+
+    font-size: 8px;
+
+    letter-spacing: .15em;
+
+}
+
+
+/* ============================================================
+   ENERGY FLOW
+============================================================ */
+
+.energy-flow {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 25px;
+
+    flex-wrap: wrap;
+
+}
+
+.energy-flow > div {
+
+    min-width: 130px;
+
+    padding: 25px;
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    text-align: center;
+
+}
+
+.energy-flow span {
+
+    color: var(--engine-red);
+
+    font-size: 9px;
+
+}
+
+.energy-flow strong {
+
+    display: block;
+
+    margin: 10px 0;
+
+    font-size: 16px;
+
+}
+
+.energy-flow small {
+
+    color: #555;
+
+    font-size: 7px;
+
+}
+
+.energy-flow > i {
+
+    color: var(--engine-red);
+
+}
+
+.chemistry-note {
+
+    margin-top: 60px;
+
+    padding: 30px;
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+}
+
+.chemistry-note strong {
+
+    color: var(--engine-red);
+
+    font-size: 9px;
+
+    letter-spacing: .15em;
+
+}
+
+.chemistry-note p {
+
+    max-width: 850px;
+
+    color: #777;
+
+    line-height: 1.8;
+
+}
+
+
+/* ============================================================
+   GALLERY
+============================================================ */
+
+.parts-slider {
+
+    position: relative;
+
+}
+
+.parts-track {
+
+    display: flex;
+
+    overflow: hidden;
+
+}
+
+.part-slide {
+
+    min-width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        1.5fr 1fr;
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+}
+
+.part-image {
+
+    aspect-ratio: 16 / 9;
+
+    overflow: hidden;
+
+    background: #080808;
+
+}
+
+.part-image img {
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    filter:
+        grayscale(.35)
+        contrast(1.1);
+
+    transition:
+        transform .6s ease;
+
+}
+
+.part-slide:hover img {
+
+    transform:
+        scale(1.04);
+
+}
+
+.part-info {
+
+    padding: 50px;
+
+}
+
+.part-info span {
+
+    color: var(--engine-red);
+
+    font-size: 8px;
+
+    letter-spacing: .2em;
+
+}
+
+.part-info h3 {
+
+    font-size: 35px;
+
+}
+
+.part-info p {
+
+    color: #777;
+
+}
+
+.slider-button {
+
+    position: absolute;
+
+    z-index: 5;
+
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    width: 45px;
+    height: 45px;
+
+    border:
+        1px solid rgba(255,255,255,.15);
+
+    background:
+        rgba(0,0,0,.8);
+
+    color: white;
+
+    cursor: pointer;
+
+}
+
+.slider-prev {
+    left: 15px;
+}
+
+.slider-next {
+    right: 15px;
+}
+
+.slider-progress {
+
+    height: 2px;
+
+    margin-top: 15px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--engine-red) 0 25%,
+            #222 25% 100%
+        );
+
+}
+
+
+/* ============================================================
+   EDUCATION
+============================================================ */
+
+.education-card {
+
+    max-width: 900px;
+
+    padding: 50px;
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.035),
+            transparent
+        );
+
+}
+
+.education-card h2 {
+
+    font-size: clamp(40px, 6vw, 80px);
+
+    line-height: .9;
+
+}
+
+.education-card h2 span {
+
+    color: transparent;
+
+    -webkit-text-stroke:
+        1px rgba(255,255,255,.3);
+
+}
+
+.education-card p {
+
+    color: #777;
+
+    max-width: 750px;
+
+    line-height: 1.8;
+
+}
+
+
+/* ============================================================
+   FOOTER
+============================================================ */
+
+.lab-footer {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 30px;
+
+    padding: 50px 7vw;
+
+    border-top:
+        1px solid rgba(255,255,255,.08);
+
+    color: #555;
+
+    font-size: 8px;
+
+    letter-spacing: .15em;
+
+}
+
+.lab-footer div {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+}
+
+.lab-footer strong {
+
+    color: #ddd;
+
+    font-size: 15px;
+
+}
+
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 900px) {
+
+    .engine-viewer-shell {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .engine-control-panel {
+
+        border-left: 0;
+
+        border-top:
+            1px solid rgba(255,255,255,.08);
+
+    }
+
+    .technical-grid {
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+    .materials-grid {
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+    .engine-data-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .section-header {
+
+        flex-direction: column;
+
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .lab-hero {
+
+        padding:
+            130px 6vw 70px;
+
+    }
+
+    .hero-metrics {
+
+        gap: 25px;
+
+    }
+
+    .engine-viewer-section,
+    .technical-section,
+    .data-section,
+    .diagram-section,
+    .materials-section,
+    .energy-section,
+    .gallery-section,
+    .education-section {
+
+        padding:
+            80px 6vw;
+
+    }
+
+    .engine-viewer {
+
+        min-height: 500px;
+
+    }
+
+    .technical-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .materials-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .part-slide {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .part-info {
+
+        padding: 30px;
+
+    }
+
+    .energy-flow {
+
+        flex-direction: column;
+
+    }
+
+    .energy-flow > i {
+
+        transform:
+            rotate(90deg);
+
+    }
+
+    .lab-footer {
+
+        flex-direction: column;
+
+    }
+
+}
