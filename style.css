@@ -6178,3 +6178,476 @@ body::after {
     }
 
 }
+
+
+
+
+
+
+/* =========================================================
+   ENGINE ACCESS — PREMIUM GREEN CTA
+========================================================= */
+
+.engine-access {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 70px 20px 90px;
+
+    overflow: hidden;
+    z-index: 20;
+}
+
+/* Ambient green light */
+
+.engine-access::before {
+    content: "";
+    position: absolute;
+
+    width: 500px;
+    height: 180px;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    background: radial-gradient(
+        ellipse,
+        rgba(0, 255, 120, 0.16),
+        rgba(0, 255, 120, 0.05) 40%,
+        transparent 75%
+    );
+
+    filter: blur(25px);
+
+    animation: engineAmbient 4s ease-in-out infinite;
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   BUTTON
+========================================================= */
+
+.engine-button {
+    position: relative;
+
+    width: min(650px, 92vw);
+    min-height: 180px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-decoration: none;
+
+    border: 1px solid rgba(0, 255, 120, 0.55);
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0, 255, 120, 0.08),
+            rgba(0, 0, 0, 0.92) 45%,
+            rgba(0, 255, 120, 0.04)
+        );
+
+    box-shadow:
+        0 0 20px rgba(0, 255, 120, 0.12),
+        inset 0 0 30px rgba(0, 255, 120, 0.035);
+
+    overflow: hidden;
+
+    isolation: isolate;
+
+    transition:
+        transform 0.45s cubic-bezier(.2,.8,.2,1),
+        border-color 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+
+/* Moving border */
+
+.engine-button::before {
+    content: "";
+
+    position: absolute;
+    inset: -2px;
+
+    background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        transparent 120deg,
+        rgba(0, 255, 120, 0.9) 180deg,
+        transparent 240deg,
+        transparent 360deg
+    );
+
+    animation: engineBorder 4s linear infinite;
+
+    z-index: -2;
+}
+
+
+/* Inner surface */
+
+.engine-button::after {
+    content: "";
+
+    position: absolute;
+    inset: 1px;
+
+    border-radius: 17px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(3, 15, 9, 0.98),
+            rgba(0, 0, 0, 0.96)
+        );
+
+    z-index: -1;
+}
+
+
+/* =========================================================
+   GRID EFFECT
+========================================================= */
+
+.engine-button-grid {
+    position: absolute;
+    inset: 0;
+
+    background-image:
+        linear-gradient(
+            rgba(0, 255, 120, 0.035) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(0, 255, 120, 0.035) 1px,
+            transparent 1px
+        );
+
+    background-size: 25px 25px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        transparent,
+        black 30%,
+        black 70%,
+        transparent
+    );
+
+    opacity: 0.6;
+
+    animation: engineGrid 5s linear infinite;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.engine-button-content {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
+
+    z-index: 5;
+
+    transform: translateZ(0);
+}
+
+
+/* SYSTEM ONLINE */
+
+.engine-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 8px;
+
+    font-family: "Roboto Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+
+    color: rgba(0, 255, 120, 0.75);
+
+    text-shadow:
+        0 0 10px rgba(0, 255, 120, 0.7);
+}
+
+
+.engine-status-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #00ff78;
+
+    box-shadow:
+        0 0 6px #00ff78,
+        0 0 14px rgba(0, 255, 120, 0.9);
+
+    animation: enginePulse 1.3s ease-in-out infinite;
+}
+
+
+/* ENGINE */
+
+.engine-title {
+    font-family: "Playfair Display", serif;
+
+    font-size: clamp(42px, 7vw, 72px);
+    font-weight: 700;
+
+    font-style: italic;
+    letter-spacing: 8px;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 0 10px rgba(0, 255, 120, 0.35),
+        0 0 30px rgba(0, 255, 120, 0.25);
+
+    transition:
+        color 0.35s ease,
+        text-shadow 0.35s ease;
+}
+
+
+/* SUBTITLE */
+
+.engine-subtitle {
+    margin-top: 5px;
+
+    font-family: "Roboto Mono", monospace;
+
+    font-size: 10px;
+    letter-spacing: 3px;
+
+    color: rgba(255, 255, 255, 0.52);
+
+    transition:
+        color 0.35s ease,
+        letter-spacing 0.35s ease;
+}
+
+
+/* =========================================================
+   ARROW
+========================================================= */
+
+.engine-arrow {
+    position: absolute;
+
+    right: 28px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid rgba(0, 255, 120, 0.35);
+    border-radius: 50%;
+
+    color: #00ff78;
+
+    font-size: 22px;
+
+    box-shadow:
+        0 0 15px rgba(0, 255, 120, 0.12);
+
+    transition:
+        transform 0.35s ease,
+        background 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+
+/* =========================================================
+   HOVER
+========================================================= */
+
+.engine-button:hover {
+    transform:
+        translateY(-7px)
+        scale(1.015);
+
+    border-color: rgba(0, 255, 120, 0.95);
+
+    box-shadow:
+        0 0 25px rgba(0, 255, 120, 0.25),
+        0 0 70px rgba(0, 255, 120, 0.12),
+        inset 0 0 35px rgba(0, 255, 120, 0.07);
+}
+
+
+.engine-button:hover .engine-title {
+    color: #00ff78;
+
+    text-shadow:
+        0 0 12px rgba(0, 255, 120, 0.8),
+        0 0 35px rgba(0, 255, 120, 0.5);
+}
+
+
+.engine-button:hover .engine-subtitle {
+    color: rgba(255, 255, 255, 0.85);
+    letter-spacing: 4px;
+}
+
+
+.engine-button:hover .engine-arrow {
+    transform:
+        translateY(-50%)
+        translate(5px, -5px);
+
+    background: rgba(0, 255, 120, 0.1);
+
+    box-shadow:
+        0 0 20px rgba(0, 255, 120, 0.35);
+}
+
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes engineBorder {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+@keyframes enginePulse {
+
+    0%,
+    100% {
+        opacity: 0.45;
+        transform: scale(0.8);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.15);
+    }
+}
+
+
+@keyframes engineAmbient {
+
+    0%,
+    100% {
+        opacity: 0.45;
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.12);
+    }
+}
+
+
+@keyframes engineGrid {
+
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(25px);
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .engine-access {
+        padding:
+            50px 15px
+            70px;
+    }
+
+    .engine-button {
+        min-height: 155px;
+        border-radius: 15px;
+    }
+
+    .engine-button::after {
+        border-radius: 14px;
+    }
+
+    .engine-title {
+        font-size: 43px;
+        letter-spacing: 5px;
+    }
+
+    .engine-subtitle {
+        font-size: 8px;
+        letter-spacing: 2px;
+    }
+
+    .engine-status {
+        font-size: 8px;
+        letter-spacing: 2px;
+    }
+
+    .engine-arrow {
+        right: 15px;
+
+        width: 36px;
+        height: 36px;
+
+        font-size: 18px;
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .engine-button,
+    .engine-button::before,
+    .engine-button-grid,
+    .engine-status-dot,
+    .engine-access::before {
+        animation: none !important;
+        transition: none !important;
+    }
+
+}
