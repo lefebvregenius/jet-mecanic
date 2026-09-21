@@ -4706,7 +4706,7 @@ const UI = {
 
     navigation:
         document.querySelector(
-            ".nav-menu"
+           "#site-menu"
         ),
 
     navigationLinks:
